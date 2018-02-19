@@ -1,0 +1,44 @@
+---
+title: "Visualization dashboard based on a series of data about daily life"
+author: "Lianguan Zhou"
+date: "2018-02-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is a summary of my daily life dashboard. To view the dashboard, please visit [here](https://liangquanzhou.shinyapps.io/daily_dashboard/).
+
+## Data Collection
+
+1. Monthly Data
+  - Credit Card expenditure
+  - Electricity Payment
+
+2. Daily Data
+  - Miles of driving
+  - Weights
+  - Sleep Hours
+
+## Analysis
+
+Trying to visulize the data from my daily life, and trying to find out if there are interesting patterns from my daily data. e.g:
+
+1. What distances did I drive everyday?
+2. How many daily sleeping hours do I have?
+3. How did my weights change?
+4. How much money did I pay for my credit card for each month?
+5. How much Electricity did I use for each month?
+
+## Tools for visualization
+
+`R` + `flexdashboard` +`shiny` + `plotly`
+
+## Visualization Methods 
+
+* Scatter + Line plot for daily data
+* Bar plot for monthly data
+
+ 

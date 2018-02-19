@@ -1,0 +1,96 @@
+---
+title: "Daily Life Dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    oriention: rows
+    vertical_layout: fill
+    source_code: embed
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+# load packages
+library(tidyverse)
+library(magrittr)
+library(flexdashboard)
+library(rmarkdown)
+library(rsconnect)
+library(plotly)
+library(shiny)
+library(zoo)
+
+life_data <- readr::read_rds("life_data.rds")
+daily <- life_data$daily
+monthly <- life_data$monthly
+
+monthly <- monthly %>% 
+  mutate(month = as.factor(zoo::as.yearmon(month)))
+```
+
+Inputs {.sidebar}
+-----------------------------------------------------------------------
+
+Final project for ANLY 512 class.
+
+**Left**: select variables to see:
+
+- `distance`: Daily commute/travel distance (miles) over 6 weeks  
+- `weiths`: Weights (lbs) changes over 6 weeks  
+- `sleep_hours`: Sleeping hours changes for 6 weeks  
+
+**Top Right**: Monthly Credit Card Expenditure (dollars) over 13 months
+
+**Bottom Right**: Monthly Electricity Expenditure (dollars) over 13 months
+
+<br/>
+```{r}
+selectInput(inputId = 'index_name', 
+            label = 'Select daily variables', 
+            choices = names(daily) %>% tail(-1),
+            selected = names(daily)[[2]]
+            )
+
+```
+
+Row {data-height=650}
+-----------------------------------------------------------------------
+
+### Daily data
+
+```{r}
+renderPlotly({
+  p <- 
+    daily %>% 
+    ggplot(aes(x = date, y = daily[[input$index_name]])) +
+    geom_point() +
+    geom_line() +
+    labs(x = "Date", y = input$index_name)
+  ggplotly(p)
+})
+```
+
+
+Row {data-height=350}
+-----------------------------------------------------------------------
+
+### Monthly Credit Card Expenditure
+
+```{r}
+renderPlot({
+  monthly %>% 
+    ggplot(aes(x = month, y = credit_card)) +
+    geom_bar(stat = "identity") +
+    labs(x = "Month", y = "Credit Card Expenditure")
+})
+```
+
+### Monthly Electricity Expenditure
+
+```{r}
+renderPlot({
+  monthly %>% 
+    ggplot(aes(x = month, y = electricity)) +
+    geom_bar(stat = "identity") +
+    labs(x = "Month", y = "Electricity Expenditure")
+})
+```
